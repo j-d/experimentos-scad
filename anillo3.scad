@@ -1,12 +1,12 @@
 use <funciones.scad>
 
-$fn = 50;
+$fn = 100;
 diametro_corona = 6;
-separacion_coronas = 7;
-ancho = 29;
+separacion_coronas = 4;
+ancho = 28.5;
 grosor = 2.5;
 angulo = 360;
-bottom_trim = 0.25;
+bottom_trim = 0.15;
 angulo_hueco = 12;
 diametro_hueco = 4.7;
 
@@ -16,41 +16,28 @@ ancho_inner_cubo = 4;
 alto_inner_cubo = 4;
 diferencia_inner_cubo = 3;
 
+alto = 10;
+radio_arco = 14;
+
+
 /////
 
-ancho_tapa = ancho + diametro_corona/2 + 5;
-ancho_cuadrado = diametro_corona/4;
-redondeo = 1;
-angulo_apertura = (360-angulo)/2;
+diametro_corona2 = diametro_corona / 2;
+ancho_cuadrado   = diametro_corona / 4;
+alto2            = alto / 2;
+grosor2          = grosor / 2;
+radio_arco_medio = radio_arco - grosor2;
+arco             = 2 * asin(alto2 / radio_arco_medio);
+radio_arco2      = radio_arco / 2;
+arco2            = arco / 2;
+ancho2           = ancho / 2;
 
 anillo();
 
 module anillo() {
-    difference() {
-        rotate(angulo_apertura)
-            rotate_extrude(angle=angulo) {
-                //translate([ancho/2 - ancho_cuadrado, separacion_coronas+diametro_corona/2 - bottom_trim]) semicircle_redondeado(diametro_corona);
-                difference() {
-                    color("red") translate([ancho/2 - ancho_cuadrado, diametro_corona/2 - bottom_trim]) square([ancho_cuadrado, separacion_coronas]);
-                    translate([10.6, -1 + separacion_coronas]) rotate(45) square(10);
-                }
-                
-                difference() {
-                    translate([ancho/2 - ancho_cuadrado, diametro_corona/2 - bottom_trim]) semicircle_redondeado(diametro_corona);
-                    translate([ancho/2 - ancho_cuadrado, - bottom_trim]) square([diametro_corona/2, bottom_trim]);
-                }
-                
-                color("green") translate([ancho/2 - ancho_cuadrado/2 - ancho_cuadrado + diametro_corona/2, separacion_coronas+diametro_corona -ancho_cuadrado/2 - bottom_trim]) circle(d=ancho_cuadrado);
-                
-                difference() {
-                    translate([19, 1.3 + separacion_coronas]) color("pink") rotate(90) cuartocircle(diametro_corona * 2);
-                    translate([19 + 1, 1.3 - 1 + separacion_coronas]) color("pink") rotate(90) cuartocircle(diametro_corona * 2);
-                    translate([20.5, separacion_coronas]) rotate(45) square(10);
-                }
-                
-                
-  
-            }
-    }
-
+    rotate_extrude(angle=angulo)
+        difference() {
+            translate([radio_arco - ancho_cuadrado + ancho2, alto2 + 1 - bottom_trim]) rotate(180) arco_redondeado(radio_arco * 2, ancho_cuadrado, arco);
+            translate([0, -1]) square([ancho, 1]);
+        }
 }

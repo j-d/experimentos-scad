@@ -172,8 +172,6 @@ module talla_semicirculo(diametro, rotacion = 0, sobresaliente = 0) {
 }
 
 module arco_redondeado(diametro, grosor, angulo, bolas_en_exterior = true) {
-    $fn = 100;
-
     diametro2         = diametro / 2;
     grosor2           = grosor / 2;
     diametro_medio    = diametro2 - grosor2;
