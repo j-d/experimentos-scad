@@ -5,11 +5,11 @@ $fn = 50;
 diametro             = 4.8;
 come_circulo         = 0.25;
 margen_circulo       = 3;
-largo_inserto        = 8;
+largo_inserto        = 5;
 trim                 = 0.15;
 margen               = 0.10;
-a1                   = 150;
-a2                   = 70;
+a1                   = 140;
+a2                   = 80;
 longitud_segmento    = largo_inserto + 5;
 inserccion_en_esfera = 1.6;
 
@@ -34,18 +34,79 @@ centro_al_lado_a_cubo = diametro2 + margen_circulo2;
 centro_al_lado_b_cubo = diametro2 - come_circulo;
 centro_al_alto_cubo   = alto / 2;
 largo_cubo            = centro_al_lado_a_cubo * 2;
+d_esfera              = diagonal_inserto2 - margen_circulo2;
 
 ///
 
-conector();
-
+// conector();
 /*
 difference() {
-    angulo3(a1, a2);
-    raise(-diagonal_inserto2 + trim/2) cube([largo_inserto * 3, largo_inserto * 3, trim], true);
+    angulo2(a1, a2);
+    platea();
+    
 }*/
+/*
+rotate(270) rotate([0, 90, 0]) inserto_para_girar();
+*/
+
 
 //rama();
+
+difference() {
+    perfil();
+    platea();
+}
+
+module perfil() {
+    tubo(12);
+    rotate([0, 90, 0]) inserto_para_girar();
+    translate([-d_esfera, 0]) rotate(-90) { 
+        rotate(180) angulo2(90);
+        translate([-18 - d_esfera, 0]) {
+            tubo(18);
+            translate([-d_esfera, 0]) rotate(-10) { 
+                rotate([0, 90, 0]) inserto_para_girar();
+                rotate(180) angulo2(170);
+                translate([-22 - d_esfera, 0]) {
+                    tubo(22);
+                    translate([-d_esfera, 0]) rotate(-20) { 
+                        rotate([0, 90, 0]) inserto_para_girar();
+                        rotate(180) angulo2(160);
+                        translate([-34 - d_esfera, 0]) {
+                            tubo(34);
+                            translate([-d_esfera, 0]) rotate(-30) {
+                                rotate([0, 90, 0]) inserto_para_girar();
+                                rotate(180) angulo2(150);
+                                translate([-32 - d_esfera, 0]) union() {
+                                    tubo(32);
+                                    translate([-d_esfera, 0]) rotate(-30) {
+                                        rotate([0, 90, 0]) inserto_para_girar();
+                                        rotate(180) angulo2(150);
+                                        translate([-23 - d_esfera, 0]) union() {
+                                            tubo(23);
+                                            rotate([180]) translate([-d_esfera, 0]) {
+                                                rotate([0, 270, 0]) inserto_para_girar();
+                                                angulo2(150);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+module tubo(longitud) {
+    translate([longitud / 2, 0]) 
+        intersection() {
+            rotate([45, 0, 0]) cube([longitud, lado_inserto, lado_inserto], true);
+            rotate([0, 90]) cylinder(longitud * 2, d=diagonal_inserto - 2 * trim, center=true);
+        }
+}
 
 module rama() {
     translate([-largo_inserto2, 0]) inserto("I");
@@ -62,9 +123,11 @@ module angulo3(angulo1, angulo2) {
 }
 
 module angulo2(angulo) {
-    translate([-largo_inserto2 , diagonal_inserto2, 0]) inserto("I");
-    rotate(angulo - 90) toro_parcial(2 * diagonal_inserto, diagonal_inserto, 180 - angulo);
-    rotate(180 + angulo) translate([largo_inserto2, diagonal_inserto2, 0])  inserto("D");
+    rotate(180 - angulo) {
+        inserto_para_girar();
+        sphere(d=diagonal_inserto);
+        rotate(angulo) inserto_para_girar();
+    }
 }
 
 module inserto(pico = "") {
@@ -126,28 +189,33 @@ module conector() {
     rotate([0, semiangulo]) translate([longitud_segmento + centro_al_alto_cubo, 0]) rotate([270, 0, 90]) gancho();
     
     CubePoints = [
-  [ cos(semiangulo + pealpha) * -peh,  -centro_al_lado_a_cubo, sin(semiangulo + pealpha) * -peh ],  //0
-  [ cos(semiangulo + pealpha) * peh,  -centro_al_lado_a_cubo,  sin(semiangulo + pealpha) * -peh ],  //1
-  [ cos(semiangulo + pealpha) * peh,  centro_al_lado_a_cubo,   sin(semiangulo + pealpha) * -peh ],  //2
-  [ cos(semiangulo + pealpha) * -peh,  centro_al_lado_a_cubo,  sin(semiangulo + pealpha) * -peh ],  //3
-  [ cos(semiangulo + pialpha) * -pih,  -centro_al_lado_a_cubo, sin(semiangulo + pialpha) * -pih ],  //4
-  [ cos(semiangulo + pialpha) * pih,  -centro_al_lado_a_cubo,  sin(semiangulo + pialpha) * -pih ],  //5
-  [ cos(semiangulo + pialpha) * pih,  centro_al_lado_a_cubo,   sin(semiangulo + pialpha) * -pih ],  //6
-  [ cos(semiangulo + pialpha) * -pih,  centro_al_lado_a_cubo,  sin(semiangulo + pialpha) * -pih ]]; //7
-    
-CubeFaces = [
-  [0,1,2,3],  // bottom
-  [4,5,1,0],  // front
-  [7,6,5,4],  // top
-  [5,6,2,1],  // right
-  [6,7,3,2],  // back
-  [7,4,0,3]]; // left
+      [ cos(semiangulo + pealpha) * -peh,  -centro_al_lado_a_cubo, sin(semiangulo + pealpha) * -peh ],  //0
+      [ cos(semiangulo + pealpha) * peh,  -centro_al_lado_a_cubo,  sin(semiangulo + pealpha) * -peh ],  //1
+      [ cos(semiangulo + pealpha) * peh,  centro_al_lado_a_cubo,   sin(semiangulo + pealpha) * -peh ],  //2
+      [ cos(semiangulo + pealpha) * -peh,  centro_al_lado_a_cubo,  sin(semiangulo + pealpha) * -peh ],  //3
+      [ cos(semiangulo + pialpha) * -pih,  -centro_al_lado_a_cubo, sin(semiangulo + pialpha) * -pih ],  //4
+      [ cos(semiangulo + pialpha) * pih,  -centro_al_lado_a_cubo,  sin(semiangulo + pialpha) * -pih ],  //5
+      [ cos(semiangulo + pialpha) * pih,  centro_al_lado_a_cubo,   sin(semiangulo + pialpha) * -pih ],  //6
+      [ cos(semiangulo + pialpha) * -pih,  centro_al_lado_a_cubo,  sin(semiangulo + pialpha) * -pih ]]; //7
   
-polyhedron( CubePoints, CubeFaces );
+    altura_union = sin(semiangulo + pealpha) * peh - sin(semiangulo + pialpha) * pih;
+  
+    if (altura_union < 2) {
+        translate([0, 0, sin(semiangulo + pealpha) * -peh - (2 - altura_union)/2]) cube([cos(semiangulo + pealpha) * peh * 2, ancho, 2 - altura_union], true);
+    }
+    
+    CubeFaces = [
+      [0,1,2,3],  // bottom
+      [4,5,1,0],  // front
+      [7,6,5,4],  // top
+      [5,6,2,1],  // right
+      [6,7,3,2],  // back
+      [7,4,0,3]]; // left
+      
+    polyhedron( CubePoints, CubeFaces );
 
-    /*linear_extrude(largo_cubo, center=true) 
-        hull() {
-            translate([centro_al_lado_a_cubo, -longitud_segmento - centro_al_alto_cubo]) rotate([90, 0, 90]) cara_atras_cubo();
-            translate([longitud_segmento + centro_al_alto_cubo, -centro_al_lado_a_cubo]) rotate([90, 0]) cara_atras_cubo();
-        }*/
+}
+
+module platea() {
+    raise(-diagonal_inserto2 + trim/2) cube([300, 300, trim], true);
 }
