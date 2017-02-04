@@ -26,7 +26,7 @@ difference() {
 }*/
 
 
-lado_inserto = 3.65;
+lado_inserto = 3.6;
 diagonal_inserto  = sqrt(2 * lado_inserto * lado_inserto);
 diagonal_inserto2 = diagonal_inserto / 2;
 diagonal_inserto4 = diagonal_inserto / 4;
@@ -34,22 +34,44 @@ lado_inserto2     = lado_inserto / 2;
 
 difference() {
     union() {
-        translate([-largo_inserto2 , diagonal_inserto2, 0]) inserto("I");
-        toro_parcial(2 * diagonal_inserto, diagonal_inserto, angulo);
-        rotate(360 - angulo) translate([largo_inserto2, diagonal_inserto2, 0])  inserto("D");
+        angulo2(angulo);
+        rotate_centro([270], [0, diagonal_inserto2]) angulo2(angulo);
     }
     raise(-diagonal_inserto2 + trim/2) cube([largo_inserto * 3, largo_inserto * 3, trim], true);
 }
 
+module angulo2(angulo) {
+    translate([-largo_inserto2 , diagonal_inserto2, 0]) inserto("I");
+    rotate(angulo - 90) toro_parcial(2 * diagonal_inserto, diagonal_inserto, 180 - angulo);
+    rotate(180 + angulo) translate([largo_inserto2, diagonal_inserto2, 0])  inserto("D");
+}
+
 module inserto(pico = "") {
-    rotate([45, 0, 0]) cube([largo_inserto, lado_inserto, lado_inserto], true);
+    factor_pico  = 2;
+    recorte_pico = 1.5;
     
-    if (pico == "I") 
-        translate([-diagonal_inserto4 - largo_inserto2, 0]) 
-            rotate([0, 90]) 
-                cylinder(diagonal_inserto2, r1=0, r2=diagonal_inserto2, $fn=4, center = true);
-    else if (pico == "D")
-        translate([diagonal_inserto4 + largo_inserto2, 0]) 
-            rotate([0, 270]) 
-                cylinder(diagonal_inserto2, r1=0, r2=diagonal_inserto2, $fn=4, center = true);
+    intersection() {
+        union() {
+            rotate([45, 0, 0]) cube([largo_inserto, lado_inserto, lado_inserto], true);
+            
+            if (pico == "I") {
+                translate([-diagonal_inserto * factor_pico / 4 - largo_inserto2, 0]) 
+                    intersection() {
+                        rotate([0, 90]) 
+                            cylinder(diagonal_inserto2 * factor_pico, r1=0, r2=diagonal_inserto2, $fn=4, center = true);
+                        translate([recorte_pico, 0]) 
+                            cube([diagonal_inserto2 * factor_pico, diagonal_inserto, diagonal_inserto], true);
+                    }
+            } else if (pico == "D") {
+                translate([diagonal_inserto4 * factor_pico + largo_inserto2, 0]) 
+                    intersection() {
+                        rotate([0, 270]) 
+                            cylinder(diagonal_inserto2 * factor_pico, r1=0, r2=diagonal_inserto2, $fn=4, center = true);
+                        translate([-recorte_pico, 0]) 
+                            cube([diagonal_inserto2 * factor_pico, diagonal_inserto, diagonal_inserto], true);
+                    }
+            }
+        }
+        rotate([0, 90]) cylinder(largo_inserto * 2, d=diagonal_inserto - 2 * trim, center=true);
+    }
 }

@@ -1,8 +1,18 @@
-   
 module translate_giro(d, angulo) {
+    // rota algo como si estuviera a una distancia del origen (Para crear endings)
+    
     translate([-d * cos(180-angulo), d * sin(180-angulo), 0])
         rotate(angulo)
             children();
+}
+
+module rotate_centro(rotation, centre) {
+    // Gira algo con respecto a otro centro
+    
+    translate(centre)
+        rotate(rotation)
+            translate(-centre)
+                children();
 }
 
 module raise(z) {
@@ -105,6 +115,7 @@ module cuartocylinder_hueco(altura, diametro, grosor) {
 module cylinder_hueco(altura, diametro, grosor) {
     rotate_extrude(angle=360) translate([diametro/2 - grosor, 0]) square([grosor, altura]);
 }
+
 
 module toro_parcial(diametro_grande, diametro_pequeno, angulo) {
     rotate_extrude(angle=angulo)
