@@ -51,10 +51,37 @@ rotate(270) rotate([0, 90, 0]) inserto_para_girar();
 
 
 //rama();
-
+/*
 difference() {
     perfil();
     platea();
+}
+*/
+
+borde();
+
+module borde() {
+    tubo(72.5);
+    translate([-d_esfera, 0]) rotate(-40) {
+        rotate([0, 90]) inserto_para_girar();
+        rotate([0, -90]) inserto_para_girar();
+        rotate(180) angulo2(140);
+        translate([-11 - d_esfera, 0]) {
+            tubo(11);
+            translate([-d_esfera, 0]) rotate(-50) {
+                rotate([0, 90]) inserto_para_girar();
+                rotate([0, -90]) inserto_para_girar();
+                rotate(180) angulo2(130);
+                translate([-25 - d_esfera, 0]) {
+                    tubo(25);
+                    translate([-d_esfera, 0]) {
+                        rotate([90, 0, 0]) angulo2(90);
+                        rotate([0, 90]) inserto_para_girar();
+                    }
+                }
+            }
+        }
+    }
 }
 
 module perfil() {
@@ -100,12 +127,14 @@ module perfil() {
     }
 }
 
-module tubo(longitud) {
+module tubo(longitud, soporte = false) {
     translate([longitud / 2, 0]) 
         intersection() {
             rotate([45, 0, 0]) cube([longitud, lado_inserto, lado_inserto], true);
             rotate([0, 90]) cylinder(longitud * 2, d=diagonal_inserto - 2 * trim, center=true);
         }
+        
+    translate([longitud / 2, 0, -diagonal_inserto +0.7]) cube([longitud - diagonal_inserto + 2, 0.4, largo_inserto + 3], true);
 }
 
 module rama() {
