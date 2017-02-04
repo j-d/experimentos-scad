@@ -51,14 +51,11 @@ rotate(270) rotate([0, 90, 0]) inserto_para_girar();
 
 
 //rama();
-/*
-difference() {
-    perfil();
-    platea();
-}
-*/
 
-borde();
+perfil();
+
+
+//borde();
 
 module borde() {
     tubo(72.5);
@@ -87,32 +84,38 @@ module borde() {
 module perfil() {
     tubo(12);
     rotate([0, 90, 0]) inserto_para_girar();
+    rotate([30]) rotate([0, -90, 0]) inserto_para_girar();
     translate([-d_esfera, 0]) rotate(-90) { 
         rotate(180) angulo2(90);
         translate([-18 - d_esfera, 0]) {
             tubo(18);
             translate([-d_esfera, 0]) rotate(-10) { 
                 rotate([0, 90, 0]) inserto_para_girar();
+                rotate([0, -90, 0]) inserto_para_girar();
                 rotate(180) angulo2(170);
-                translate([-22 - d_esfera, 0]) {
-                    tubo(22);
+                translate([-23 - d_esfera, 0]) {
+                    tubo(23);
                     translate([-d_esfera, 0]) rotate(-20) { 
                         rotate([0, 90, 0]) inserto_para_girar();
+                        rotate([0, -90, 0]) inserto_para_girar();
                         rotate(180) angulo2(160);
-                        translate([-34 - d_esfera, 0]) {
-                            tubo(34);
+                        translate([-56.5 - d_esfera, 0]) {
+                            tubo(56.5);
                             translate([-d_esfera, 0]) rotate(-30) {
                                 rotate([0, 90, 0]) inserto_para_girar();
+                                rotate([0, -90, 0]) inserto_para_girar();
                                 rotate(180) angulo2(150);
-                                translate([-32 - d_esfera, 0]) union() {
-                                    tubo(32);
+                                translate([-34 - d_esfera, 0]) union() {
+                                    tubo(34);
                                     translate([-d_esfera, 0]) rotate(-30) {
                                         rotate([0, 90, 0]) inserto_para_girar();
+                                        rotate([0, -90, 0]) inserto_para_girar();
                                         rotate(180) angulo2(150);
                                         translate([-23 - d_esfera, 0]) union() {
                                             tubo(23);
                                             rotate([180]) translate([-d_esfera, 0]) {
                                                 rotate([0, 270, 0]) inserto_para_girar();
+                                                rotate([0, 90, 0]) inserto_para_girar();
                                                 angulo2(150);
                                             }
                                         }
