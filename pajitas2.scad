@@ -9,7 +9,7 @@ largo_inserto        = 8;
 trim                 = 0.15;
 margen               = 0.10;
 a1                   = 150;
-a2                   = 150;
+a2                   = 70;
 longitud_segmento    = largo_inserto + 5;
 inserccion_en_esfera = 1.6;
 
@@ -37,13 +37,13 @@ largo_cubo            = centro_al_lado_a_cubo * 2;
 
 ///
 
-//conector();
+conector();
 
-
+/*
 difference() {
     angulo3(a1, a2);
     raise(-diagonal_inserto2 + trim/2) cube([largo_inserto * 3, largo_inserto * 3, trim], true);
-}
+}*/
 
 //rama();
 
@@ -58,7 +58,7 @@ module angulo3(angulo1, angulo2) {
     sphere(d=diagonal_inserto);
     
     rotate(angulo1) inserto_para_girar();
-    rotate([180 - angulo2]) rotate([0, 90, 0]) inserto_para_girar();
+    rotate([360 - angulo2, (180-angulo1)/2 , 0]) rotate([0, 0, a1/2]) inserto_para_girar();
 }
 
 module angulo2(angulo) {
@@ -113,21 +113,27 @@ module cara_atras_cubo() {
 }
 
 module conector() {
-    pe = longitud_segmento + centro_al_alto_cubo; // punto exterior
+    pe = longitud_segmento + centro_al_alto_cubo * 2; // punto exterior
     pi = pe - alto; // punto interior
+    peh = sqrt(pow(centro_al_lado_a_cubo, 2) + pow(pe, 2));
+    pealpha = acos(pe / peh);
+    pih = sqrt(pow(centro_al_lado_a_cubo, 2) + pow(pi, 2));
+    pialpha = acos(pi / pih);
     
-    rotate([0, -45]) translate([-longitud_segmento - centro_al_alto_cubo, 0]) rotate([270, 0, 90]) gancho();
-    rotate([0, 45]) translate([longitud_segmento + centro_al_alto_cubo, 0]) rotate([270, 0, 90]) gancho();
+    semiangulo = 90 - a1/2;
+    
+    rotate([0, -semiangulo]) translate([-longitud_segmento - centro_al_alto_cubo, 0]) rotate([270, 0, 90]) gancho();
+    rotate([0, semiangulo]) translate([longitud_segmento + centro_al_alto_cubo, 0]) rotate([270, 0, 90]) gancho();
     
     CubePoints = [
-  [ sin(semiangulo) * -pe,  -centro_al_lado_a_cubo,  0 ],  //0
-  [ sin(semiangulo) * pe,  -centro_al_lado_a_cubo,  0 ],  //1
-  [ sin(semiangulo) * pe,  centro_al_lado_a_cubo,  0 ],  //2
-  [ sin(semiangulo) * -pe,  centro_al_lado_a_cubo,  0 ],  //3
-  [ sin(semiangulo) * -pi,  -centro_al_lado_a_cubo,  5 ],  //4
-  [ sin(semiangulo) * pi,  -centro_al_lado_a_cubo,  5 ],  //5
-  [ sin(semiangulo) * pi,  centro_al_lado_a_cubo,  5 ],  //6
-  [ sin(semiangulo) * -pi,  centro_al_lado_a_cubo,  5 ]]; //7
+  [ cos(semiangulo + pealpha) * -peh,  -centro_al_lado_a_cubo, sin(semiangulo + pealpha) * -peh ],  //0
+  [ cos(semiangulo + pealpha) * peh,  -centro_al_lado_a_cubo,  sin(semiangulo + pealpha) * -peh ],  //1
+  [ cos(semiangulo + pealpha) * peh,  centro_al_lado_a_cubo,   sin(semiangulo + pealpha) * -peh ],  //2
+  [ cos(semiangulo + pealpha) * -peh,  centro_al_lado_a_cubo,  sin(semiangulo + pealpha) * -peh ],  //3
+  [ cos(semiangulo + pialpha) * -pih,  -centro_al_lado_a_cubo, sin(semiangulo + pialpha) * -pih ],  //4
+  [ cos(semiangulo + pialpha) * pih,  -centro_al_lado_a_cubo,  sin(semiangulo + pialpha) * -pih ],  //5
+  [ cos(semiangulo + pialpha) * pih,  centro_al_lado_a_cubo,   sin(semiangulo + pialpha) * -pih ],  //6
+  [ cos(semiangulo + pialpha) * -pih,  centro_al_lado_a_cubo,  sin(semiangulo + pialpha) * -pih ]]; //7
     
 CubeFaces = [
   [0,1,2,3],  // bottom
