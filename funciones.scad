@@ -108,7 +108,7 @@ module cylinder_hueco(altura, diametro, grosor) {
 
 module toro_parcial(diametro_grande, diametro_pequeno, angulo) {
     rotate_extrude(angle=angulo)
-        translate([diametro_grande/2 - diametro_pequeno / 2, 0])
+        translate([diametro_grande / 2 - diametro_pequeno / 2, 0])
             circle(d=diametro_pequeno);
 }
 
