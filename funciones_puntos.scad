@@ -98,16 +98,16 @@ function angulos_vector(v) =
     v[0] != 0
     ? [
         0,
-        v[0] > 0 ? acos(v[2]/norm(v)) : 180 - acos(v[2]/norm(v)),
+        v[0] > 0 ? acos(v[2]/norm(v)) : 360 - acos(v[2]/norm(v)),
         atan(v[1] / v[0])
     ]
     : (
         v[1] != 0
-        ? [v[2] == 0 ? 90 /* Punto sobre el eje y */ : (v[1] > 0 ? -90 : 90) + atan(v[2] / v[1]), 0, 0]
+        ? [v[2] == 0 ? (/* Punto sobre el eje y */ v[1] < 0 ? 90 : 270 ) : (v[1] > 0 ? -90 : 90) + atan(v[2] / v[1]), 0, 0]
         : (
             v[2] == 0 // Es un punto en el eje z, y como ya estaba en el eje z no hay que hacer nada
                 ? undef 
-                : [0, 0, 0]
+                : [v[2] > 0 ? 0 : 180, 0, 0]
         )
     );
 

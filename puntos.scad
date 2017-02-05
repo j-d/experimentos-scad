@@ -3,7 +3,7 @@ $fn = 20;
 use <funciones_puntos.scad>
 
 diametro_vertice = 1;
-diametro_arista  = 1;
+diametro_arista  = diametro_vertice;
 grosor_lado      = 1;
 tamano_texto     = 3;
 separacion_texto = 0.25;
@@ -94,7 +94,13 @@ for (i = [1:len(p) - 1]) {
 }
 
 module lado_n(numeros) {
-    lado([ for(i=[0:len(numeros) - 1]) p[numeros[i]] ], offcentro, grosor_lado);
+    n_vertices = len(numeros);
+    
+    //lado([ for(i = [0:n_vertices - 1]) p[numeros[i]] ], offcentro, grosor_lado);
+        
+    for(i = [0:n_vertices - 1]) {
+        arista(p[numeros[i]], p[numeros[(i + 1) % n_vertices]], diametro_arista);
+    }
 }
 
 
