@@ -130,3 +130,13 @@ module dibujar_vector(a, b, diametro = 1, diametro_cono = 2.5) {
         rotate(angulos_vector(vector))
             cylinder(norm(vector) * (1 - ratio), d1=diametro_cono, d2=0, center=true);
 }
+
+module esfera_en_punto(punto, diametro) {
+    translate(punto) sphere(d=diametro);   
+}
+
+module recta_por_punto(punto, vector) {
+    translate(punto)
+        rotate(angulos_vector(vector))
+            cylinder(h=500, d=1, center=true);
+}
