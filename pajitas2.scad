@@ -99,14 +99,14 @@ module perfil() {
                         rotate([0, 90, 0]) inserto_para_girar();
                         rotate([0, -90, 0]) inserto_para_girar();
                         rotate(180) angulo2(160);
-                        translate([-56.5 - d_esfera, 0]) {
-                            tubo(56.5);
+                        translate([-58 - d_esfera, 0]) {
+                            tubo(58);
                             translate([-d_esfera, 0]) rotate(-30) {
                                 rotate([0, 90, 0]) inserto_para_girar();
                                 rotate([0, -90, 0]) inserto_para_girar();
                                 rotate(180) angulo2(150);
-                                translate([-34 - d_esfera, 0]) union() {
-                                    tubo(34);
+                                translate([-38 - d_esfera, 0]) union() {
+                                    tubo(38);
                                     translate([-d_esfera, 0]) rotate(-30) {
                                         rotate([0, 90, 0]) inserto_para_girar();
                                         rotate([0, -90, 0]) inserto_para_girar();
