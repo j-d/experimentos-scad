@@ -4,13 +4,13 @@ function rotar_punto(p, respecto_a, grados) =
     let(q = vector(p, respecto_a), m = norm(q)) 
         respecto_a + [m * cos(grados), 0, m * sin(grados)];
 
-function producto_escalar(u, v) = [u[1] * v[2] - u[2] * v[1], u[0] * v[2] - u[2] * v[0], u[0] * v[1] - u[1] * v[0]];
+function producto_escalar(u, v) = [u[1] * v[2] - u[2] * v[1], - u[0] * v[2] + u[2] * v[0], u[0] * v[1] - u[1] * v[0]];
 
 module lado(vertices, offcentro = 0, grosor_lado = 1) {
     n_vertices = len(vertices);
     punto_medio = punto_medio(vertices);
     
-    //translate(punto_medio) sphere(d = 3);
+    //vertice(punto_medio);
     
     off_vertices = [    
         for (i=[0:n_vertices - 1])
@@ -18,10 +18,17 @@ module lado(vertices, offcentro = 0, grosor_lado = 1) {
                 vertices[i] + vector * offcentro / norm(vector)
     ];
         
+    //vertices(off_vertices);
+        
     u = vector(off_vertices[1], off_vertices[0]);
     v = vector(off_vertices[2], off_vertices[0]);
         
+    //dibujar_vector(off_vertices[1], off_vertices[0]);
+    //dibujar_vector(off_vertices[2], off_vertices[0]);
+        
     producto_escalar = producto_escalar(u, v);
+        
+    //dibujar_vector(punto_medio, producto_escalar);
         
     incremento = grosor_lado * producto_escalar / (2 * norm(producto_escalar));
     

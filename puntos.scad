@@ -89,23 +89,22 @@ intersection() {
 
 
 for (i = [1:len(p) - 1]) {
-    vertice(p[i], diametro_vertice);
-    texto_en_coordenada(i);
+    %texto_en_coordenada(i);
 }
 
 module lado_n(numeros) {
     n_vertices = len(numeros);
     
-    //lado([ for(i = [0:n_vertices - 1]) p[numeros[i]] ], offcentro, grosor_lado);
+    lado([ for(i = [0:n_vertices - 1]) p[numeros[i]] ], offcentro, grosor_lado);
         
     for(i = [0:n_vertices - 1]) {
         arista(p[numeros[i]], p[numeros[(i + 1) % n_vertices]], diametro_arista);
+        vertice(p[numeros[i]], diametro_vertice);
     }
 }
 
-
 module texto_en_coordenada(c) {
-    %translate([p[c][0] + separacion_texto, p[c][1] + separacion_texto, p[c][2]])
+    translate([p[c][0] + separacion_texto, p[c][1] + separacion_texto, p[c][2]])
         rotate([5])
             linear_extrude(3)
                 text(str(c), tamano_texto);
