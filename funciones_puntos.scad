@@ -140,3 +140,21 @@ module recta_por_punto(punto, vector) {
         rotate(angulos_vector(vector))
             cylinder(h=500, d=1, center=true);
 }
+
+function angulo_triangulo_por_lados(lado1, lado2, lado3) = acos((lado1 * lado1 - lado2 * lado2 - lado3 * lado3) / (- 2 * lado2 * lado3));
+
+module triangulo_por_lados(lado1, lado2, lado3) {
+    alpha = angulo_triangulo_por_lados(lado2, lado1, lado3);
+    
+    p1 = [0, 0, 0];
+    p2 = [lado1, 0, 0];
+    p3 = [cos(alpha) * lado3, sin(alpha) * lado3, 0];
+    
+    translate(-baricentro) {
+        arista(p1, p2);
+        arista(p2, p3);
+        arista(p3, p1);
+    }
+    
+    baricentro = (p1 + p2 + p3) / 3;
+};
